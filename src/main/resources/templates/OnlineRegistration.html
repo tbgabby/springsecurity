@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">-->
+<html lang="en-us" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Sourcebuster Js -->
+    <script src="https://cdn.jsdelivr.net/npm/sourcebuster@1.1.0/dist/sourcebuster.min.js" crossorigin="anonymous"></script>
+
+    <!-- Ajax Js -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" crossorigin="anonymous"></script>
+
+    <!-- Page Title -->
+    <title>Signup with Travelbeta - Cheap Flights and Hotel Deals around the world. </title>
+
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="keywords" content="Travelbeta Signup" />
+    <meta name="description" content="Signup to access the best deals on Travelbeta - your preferred online travel agency">
+    <meta name="title" content="Signup with Travelbeta - Cheap Flights and Hotel Deals around the world">
+
+    <!-- Recaptcha.js --> <script src="https://www.google.com/recaptcha/api.js" async="" defer=""></script>
+    <!-- Bootstrap.css --> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- NProgress.css --> <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css'/>
+    <!-- NProgress.js --> <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
+<!--#################################################################################################################-->
+    <!-- NProgress.js Implementation: 1 -->
+<!--#################################################################################################################-->
+    <script>
+    if (location.hostname.match(/localhost\:8088$/)) {
+        var _gaq = _gaq||[];
+            _gaq.push(["_setAccount","UA-20473929-1"]),
+            _gaq.push(["_trackPageview"]),
+
+            function() { var a=document.createElement("script"); a.type="text/javascript", a.async=!0, a.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";
+                         var b=document.getElementsByTagName("script")[0]; b.parentNode.insertBefore(a,b)} () }
+    </script>
+<!--#################################################################################################################-->
+    <!-- Style for Setting Body Content Height -->
+<!--#################################################################################################################-->
+    <style>
+        body {
+            padding: 40px;
+        }
+    </style>
+</head>
+<body onload="updateDB();" style='display: none'>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script type="text/javascript">
+        Swal.fire({
+            title: 'Disclaimer!',
+            text: 'Dear User, please be informed that EVERY ACTIVITY on this site is STRICTLY for Employees of Travelbeta Ltd only, and is been monitored. Criminal act on this site is an offence.' + '\n' + 'Offenders, when caught, will be prosecuted!!!',
+            icon: 'warning',
+            footer:'Book cheap flights to any part of the World with&nbsp; <a href="www.travelbeta.com" target="_blank">Travelbeta</a>',
+            confirmButtonText: 'I Understand'
+        })
+    </script>
+
+    <!-- HTML Element Tag is DIV, HTML Element Class is CONTAINER -->
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="text-center" style="font-family: 'Calibri Light', serif; color:orange; font-size: 3.4278em">You are Welcome! </div>
+            <p class="text-center" style="color:#708bac; font-size: 1.1111em">Please fill the form to sign up.</p>
+
+            <!--suppress HtmlUnknownTarget -->
+            <form class="form-horizontal"  th:object="${travelbetadmin}" th:action="@{/registration}" method="post">
+                <p class="error-message" th:if="${#fields.hasGlobalErrors()}" th:each="error : ${#fields.errors('global')}" th:text="${error}"></p>
+
+                <!--suppress HtmlUnknownTarget -->
+                <form enctype="text/plain" th:object="${travelbetadmin}" th:action="@{/interactions}" method="get">
+
+                    <div id="errorDiv" class="text-center">
+                        <div class="col-sm-12">
+                            <div class="alert-info" style="font-size: 1.4334em" th:text="${message}"></div>
+                            <span class="close"></span>
+                        </div>
+                    </div>
+
+                    <input type="hidden" th:field="*{id}"/>
+
+                    <div class="form-group" th:classappend="${#fields.hasErrors('username')}? 'has-error':''">
+                        <div class="col-sm-12">
+                            <label for="username" class="control-label"></label>
+                            <input id="username" class="form-control input-lg" placeholder="Choose a Username " th:field="*{username}" required="true" onclick="hideErrorMessage()" style="font-size: 0.9999em"/>
+                            <p class="errorDiv" th:each="error : ${#fields.errors('username')}"></p>
+                        </div>
+                    </div>
+
+                    <div class="form-group" th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
+                        <div class="col-sm-12">
+                            <label for="email" class="control-label"></label>
+                            <input id="email" class="form-control input-lg" placeholder="Email Address " th:field="*{email}" required="true" onclick="hideErrorMessage()" style="font-size: 0.9999em"/>
+                            <small id="emailHelp" class="form-text text-muted"><i>Note:</i> We'll never share your email with anyone else.</small>
+                            <p class="errorDiv" th:each="error : ${#fields.errors('email')}"></p>
+                        </div>
+                    </div>
+
+                    <div class="form-group" th:classappend="${#fields.hasErrors('password')}? 'has-error':''">
+                        <div class="col-sm-12">
+                            <label for="password" class="control-label"></label>
+                            <input id="password" class="form-control input-lg" type="password" placeholder="Password (6 characters minimum) " th:field="*{password}" onclick="hideErrorMessage()" required="true" style="font-size: 0.9999em"/>
+                            <small class="form-text text-muted"><strong>Password </strong>is case-sensitive. </small>
+                            <p class="errorDiv"></p>
+                        </div>
+                    </div>
+
+                    <div class="form-group" th:classappend="${#fields.hasErrors('passwordSalt')}? 'has-error':''">
+                        <div class="col-sm-12">
+                            <label for="passwordSalt" class="control-label"></label>
+                            <input id="passwordSalt" class="form-control input-lg" type="password" placeholder="Confirm your password " th:field="*{passwordSalt}" required="true" onclick="hideErrorMessage()" style="font-size: 0.9999em"/>
+                            <p class="errorDiv"></p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <label class="control-label"></label>
+                        <div class="g-recaptcha" data-type="image" data-sitekey="6LfXMS4UAAAAAIikgY0p5X1eEsZim03cgXOQJWzp" data-callback="handleCaptchaCallback"></div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <label class="control-label"></label>
+                        <input id="submit" type="submit" class="input-lg btn btn-block" style="background-color: deepskyblue; border-color: deepskyblue; color:white" value="SIGNUP FOR AN ACCOUNT"/>
+                    </div>
+
+                    <div class="col-sm-12 text-center">
+                        <label class="control-label"></label>
+                        <p class="loginque"><big>Already have an account? <a href="/auth/login"> Login </a></big></p>
+                    </div>
+                </form>
+            </form>
+        </div>
+    </div>
+<!--#################################################################################################################-->
+    <!-- INPUT OTHER SCRIPTS HERE -->
+<!--#################################################################################################################-->
+    <!-- Popper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Bootstrap.js  -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!--#################################################################################################################-->
+    <!-- Sourcebuster.js -->
+<!--#################################################################################################################-->
+    <script type="text/javascript">
+        var sbObj = null;
+
+        function initialiseSBJS(){
+            sbjs.init({
+                lifetime: 6,
+                domain: {
+                    host: 'localhost:8080',
+                    isolate: true
+                },
+                referrals: [
+                    {
+                        host: 'plus.url.google.com',
+                        display: 'plus.google.com :)'
+                    },
+                    {
+                        host: 'blog.localhost:8080',
+                        display:'localhost'
+                    }
+                ],
+                custom_campaign: 'my_adwords_campaign',
+                promocode: true,
+                callback: placeData
+            });
+        }
+        function placeData(sb) {
+            sbObj = sb;
+            console.log('*** CURRENT USER INFO ***');
+            console.log('Type, Source, Medium, Campaign, Content, Term');
+            console.log(sb.current);
+            console.log('Date & Time of Visit, Entrance Point, Referer URL');
+            console.log(sb.current_add);
+            console.log('No. of Pages Visited, Current Page URL');
+            console.log(sb.session);
+            console.log('No. of Times Visited, IP-Address, Current User-Agent(Browser)');
+            console.log(sb.udata);
+            console.log('User Promo Code');
+            console.log(sb.promo);
+        }
+        function buildSBJSObject() {
+            return {
+                "type": sbObj.current.typ,
+                "source": sbObj.current.src,
+                "medium": sbObj.current.mdm,
+                "cmp": sbObj.current.cmp,
+                "cnt":sbObj.current.cnt,
+                "trm":sbObj.current.trm
+            };
+        }
+        $(document).ready(function() {
+            initialiseSBJS();
+            $(function updateDB() {
+                var signUpPage = buildSBJSObject();
+                $.ajax({
+                    type: "POST",
+                    url: "/registration.htm",
+                    data: signUpPage,
+                    context: document.body,
+                    success: function() {
+                        console.log("SignUp Page: Loaded");
+                    }
+                });
+            });
+        });
+<!-- ################################################################################################################-->
+     <!-- Hide Error Messages on Page -->
+<!-- ################################################################################################################-->
+        function hideErrorMessage(){
+            if(jQuery('#errorDiv').is(':visible')){
+                jQuery('#errorDiv').hide();
+            }
+        }
+<!-- ################################################################################################################-->
+     <!-- Password Verification -->
+<!-- ################################################################################################################-->
+        var password 	 = document.getElementById("password"),
+            passwordSalt = document.getElementById("passwordSalt");
+
+        function validatePassword() {
+            if (password.value.length < 6) {
+                password.setCustomValidity("Password must be 6 characters minimum");
+            } else {
+                password.setCustomValidity('');
+            }
+
+            if(password.value !== passwordSalt.value) {
+                passwordSalt.setCustomValidity("Passwords Don't Match");
+            } else {
+                passwordSalt.setCustomValidity('');
+            }
+        }
+        password.onchange = validatePassword;
+        passwordSalt.onkeyup = validatePassword;
+    </script>
+<!-- ################################################################################################################-->
+     <!-- NProgress Implementation: 2 -->
+<!-- ################################################################################################################-->
+    <script>
+        $('body').show();
+
+        $('.version').text(NProgress.version);
+            NProgress.start();
+            setTimeout(function() { NProgress.done(); $('.fade').removeClass('out');
+        }, 100);
+
+        $("#submit").click(function() {
+            NProgress.configure({ showSpinner: true });
+            NProgress.inc(0.2);
+            setTimeout(function() { NProgress.inc(1.0); $('.fade').removeClass('out'); }, 100)
+        });
+
+
+        var HN = [];
+
+        HN.factory=function(e){
+            return function(){
+                HN.push([e].concat(Array.prototype.slice.call(arguments,0))
+            )};
+        },
+
+        HN.on=HN.factory("on"), HN.once=HN.factory("once"), HN.off=HN.factory("off"), HN.emit=HN.factory("emit"), HN.load=function(){
+
+        var e = "hn-button.js"; if(document.getElementById(e)) return;
+        var t = document.createElement("script"); t.id = e, t.src="//hn-button.herokuapp.com/hn-button.js";
+        var n=document.getElementsByTagName("script")[0]; n.parentNode.insertBefore(t,n) }, HN.load();
+    </script>
+</body>
+<!--#################################################################################################################-->
+     <!-- onload="updateDB()" function in 'body' tag -->
+<!--#################################################################################################################-->
+<script>
+    function updateDB() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/registration.htm", true);
+    }
+</script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<div id="errorDiv" class="text-center">-->
+<!--    <div th:text="${message}">-->
+<!--        <div class="alert alert-info"></div>-->
+<!--    </div>-->
+<!--    <div th:if="${param.token}">-->
+<!--        <div class="alert alert-success">Congratulations! Your email has been confirmed and activated.</div>-->
+<!--    </div>-->
+<!--    <div th:if="${param.error}">-->
+<!--        <div class="alert alert-danger">Sorry! Your verification link has expired.</div>-->
+<!--    </div>-->
+<!--    <span class="close"></span>-->
+<!--</div>-->
+
+<!--<div id="errorDiv" class="text-center">-->
+<!--    <div th:if="${param.success}">-->
+<!--        <div class="alert alert-info">A verification email has been sent to your mail.</div>-->
+<!--    </div>-->
+<!--    <div th:if="${param.token}">-->
+<!--        <div class="alert alert-success">Congratulations! Your email has been confirmed and activated.</div>-->
+<!--    </div>-->
+<!--    <div th:if="${param.error}">-->
+<!--        <div class="alert alert-danger">Oops! Sorry, Your verification link has expired.</div>-->
+<!--    </div>-->
+<!--    <span class="close"></span>-->
+<!--</div>-->
+
+<!--// $("#b-40").click(function() { NProgress.start(0.4); });-->
+<!--// $("#b-40").click(function() { NProgress.set(0.4); });-->
+<!--// $("#b-40").click(function() { NProgress.inc(0.4); });-->
+<!--// $("#b-100").click(function() { NProgress.done(); });-->

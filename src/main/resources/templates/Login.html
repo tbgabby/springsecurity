@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en-us" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- Sourcebuster Js -->
+	<script src="https://cdn.jsdelivr.net/npm/sourcebuster@1.1.0/dist/sourcebuster.min.js" crossorigin="anonymous"></script>
+	<!-- Ajax jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+	<!-- Page Title -->
+	<title>Login | TravelBeta</title>
+
+	<!-- Meta Tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<meta name="keywords" content="Travelbeta Signup"/>
+	<meta name="description" content="Signup to access the best deals on Travelbeta - your preferred online travel agency">
+	<meta name="title" content="Signup with Travelbeta - Cheap Flights and Hotel Deals around the world">
+
+	<!-- Bootstrap CSS --> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
+<!--#################################################################################################################-->
+	<!-- Style for Setting Body Content Height -->
+<!--#################################################################################################################-->
+	<style>
+		body {
+			padding: 130px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="col-md-6 col-md-offset-3">
+			<div class="text-center" style="font-family: 'Calibri Light', serif; color:orange; font-size: 3.45em">Welcome back!</div>
+			<p class="text-center" style="color:#708bac; font-size: 1.1111em">Please login to your account.</p>
+
+			<form th:action="@{/auth/login}" method="post">
+				<div id="errorDiv" class="col-sm-12">
+					<div th:if="${param.logout}">
+						<div class="alert alert-success">You have successfully logged out.</div>
+					</div>
+					<div th:if="${param.error}">
+						<div class="alert alert-danger">Invalid username or password.</div>
+					</div>
+					<span class="close"></span>
+				</div>
+
+				<div class="form-group">
+					<div class="col-sm-12">
+						<label for="username" class="col-sm-2 control-label"></label>
+						<input type="text" id="username" name="username" class="form-control input-lg" placeholder="Enter username" required onclick="hideErrorMessage()" style="font-size: 0.9999em" />
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<label for="password" class="col-sm-2 control-label"></label>
+					<input type="password" id="password" name="password" class="form-control input-lg" placeholder="Confirm password" required onclick="hideErrorMessage()" style="font-size: 0.9999em" />
+				</div>
+				<div class="col-sm-12 input-lg">
+					<a href="/forgot/password" class="pull-left" style="color:#708bac; font-size: 0.8880em"><small>Forgot password?</small></a>
+					<a href="/adminstrator/user" class="pull-right" style="color:#708bac; font-size: 0.8880em"><small>I don't have an account?</small></a>
+				</div>
+				<div class="col-sm-12">
+					<button type="submit" class="input-lg btn btn-block" style="background-color: deepskyblue; border-color: deepskyblue; color:white"><strong>LOGIN TO YOUR ACCOUNT</strong></button>
+				</div>
+			</form>
+		</div>
+	</div>
+<!--#################################################################################################################-->
+	<!-- INPUT OTHER SCRIPTS HERE -->
+<!--#################################################################################################################-->
+	<!-- Popper.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<!-- Bootstrap.js  -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!--#################################################################################################################-->
+	<!-- Sourcebuster.js -->
+<!--#################################################################################################################-->
+	<script type="text/javascript">
+		var sbObj = null;
+
+		function initialiseSBJS(){
+			sbjs.init({
+				lifetime: 6,
+				domain: {
+					host: 'localhost:8080',
+					isolate: true
+				},
+				referrals: [
+					{
+						host: 'plus.url.google.com',
+						display: 'plus.google.com :)'
+					},
+					{
+						host: 'blog.localhost:8080',
+						display:'localhost'
+					}
+				],
+				custom_campaign: 'my_adwords_campaign',
+				promocode: true,
+				callback: placeData
+			});
+		}
+		function placeData(sb) {
+			sbObj = sb;
+			console.log('*** CURRENT USER INFO ***');
+			console.log('Type, Source, Medium, Campaign, Content, Term');
+			console.log(sb.current);
+			console.log('Date & Time of Visit, Entrance Point, Referer URL');
+			console.log(sb.current_add);
+			console.log('No. of Pages Visited, Current Page URL');
+			console.log(sb.session);
+			console.log('No. of Times Visited, IP-Address, Current User-Agent(Browser)');
+			console.log(sb.udata);
+			console.log('User Promo Code');
+			console.log(sb.promo);
+		}
+		function buildSBJSObject() {
+			return {
+				"type": sbObj.current.typ,
+				"source": sbObj.current.src,
+				"medium": sbObj.current.mdm,
+				"cmp": sbObj.current.cmp,
+				"cnt":sbObj.current.cnt,
+				"trm":sbObj.current.trm
+			};
+		}
+		$(document).ready(function() {
+			initialiseSBJS();
+			$(function updateDB() {
+				var signUpPage = buildSBJSObject();
+				$.ajax({
+					type: "POST",
+					url: "/portal_user.htm",
+					data: signUpPage,
+					context: document.body,
+					success: function() {
+						console.log("SignUp Page: Loaded");
+					}
+				});
+			});
+		});
+<!--#################################################################################################################-->
+ 	<!-- Hide Error Messages on Page -->
+<!--#################################################################################################################-->
+		function hideErrorMessage(){
+			if(jQuery('#errorDiv').is(':visible')){
+				jQuery('#errorDiv').hide();
+			}
+		}
+	</script>
+</body>
+</html>
